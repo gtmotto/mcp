@@ -1,0 +1,19 @@
+{
+  "name": "gtm-otto",
+  "description": "Self-driving LinkedIn prospecting from Claude Code. Connects the GTM Otto MCP server (21 tools, no send verb) and adds six skills: launch a play, post discovery, weekly play review, Instantly to LinkedIn, HeyReach migration, LinkedIn safety check.",
+  "version": "1.0.0",
+  "author": {
+    "name": "GTM Otto",
+    "url": "https://gtmotto.com"
+  },
+  "homepage": "https://gtmotto.com/docs/mcp",
+  "repository": "https://github.com/gtmotto/mcp",
+  "license": "MIT",
+  "keywords": ["linkedin", "prospecting", "outbound", "gtm", "mcp", "sales"],
+  "mcpServers": {
+    "gtmotto": {
+      "type": "http",
+      "url": "https://agent.gtmotto.com/mcp"
+    }
+  }
+}

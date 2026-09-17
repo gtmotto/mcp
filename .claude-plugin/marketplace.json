@@ -1,0 +1,28 @@
+{
+  "$schema": "https://code.claude.com/schemas/marketplace.json",
+  "name": "gtmotto",
+  "description": "GTM Otto for Claude Code: the MCP server plus six skills for self-driving LinkedIn prospecting.",
+  "version": "1.0.0",
+  "owner": {
+    "name": "GTM Otto",
+    "url": "https://gtmotto.com"
+  },
+  "plugins": [
+    {
+      "name": "gtm-otto",
+      "displayName": "GTM Otto",
+      "description": "Give Claude a LinkedIn seat that works while you sleep. Connects the GTM Otto MCP server and adds six skills: launch a play, post discovery, weekly play review, Instantly to LinkedIn, HeyReach migration, LinkedIn safety check.",
+      "source": "./plugins/gtm-otto",
+      "version": "1.0.0",
+      "author": {
+        "name": "GTM Otto",
+        "url": "https://gtmotto.com"
+      },
+      "homepage": "https://gtmotto.com/docs/mcp",
+      "repository": "https://github.com/gtmotto/mcp",
+      "license": "MIT",
+      "keywords": ["linkedin", "prospecting", "outbound", "gtm", "mcp", "sales"],
+      "category": "sales"
+    }
+  ]
+}

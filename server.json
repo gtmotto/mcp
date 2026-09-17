@@ -1,0 +1,26 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "com.gtmotto/gtmotto",
+  "title": "GTM Otto",
+  "description": "Self-driving LinkedIn prospecting from Claude, Cursor or ChatGPT, with human message approvals.",
+  "version": "1.2.0",
+  "websiteUrl": "https://gtmotto.com/docs/mcp",
+  "repository": {
+    "url": "https://github.com/gtmotto/mcp",
+    "source": "github"
+  },
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://agent.gtmotto.com/mcp",
+      "headers": [
+        {
+          "name": "Authorization",
+          "description": "Optional. `Bearer gtm_sk_...` with an API key minted at https://app.gtmotto.com/connect. When the header is absent the server uses OAuth: the client shows a Connect card on the first protected call and the user signs in in the browser.",
+          "isRequired": false,
+          "isSecret": true
+        }
+      ]
+    }
+  ]
+}
