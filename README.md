@@ -8,7 +8,7 @@ own LinkedIn account (visit, like, comment), invites them, and opens the
 conversation. Nothing is said without you.
 
 This repository is the public home of the GTM Otto MCP server: the registry
-manifest (`server.json`), the Claude Code plugin with six skills, the tool
+manifest (`server.json`), the Claude Code plugin with eight skills, the tool
 reference and the onboarding guide. The server itself runs at
 `https://agent.gtmotto.com/mcp` (Streamable HTTP).
 
@@ -93,7 +93,7 @@ n8n, Windsurf, VS Code and the reference `mcp-remote` shim all fit.
 
 ## Skills for Claude Code
 
-The `gtm-otto` plugin connects the server and adds six skills that turn a sentence
+The `gtm-otto` plugin connects the server and adds eight skills that turn a sentence
 into a running play:
 
 ```
@@ -104,7 +104,9 @@ into a running play:
 | Skill | What it does |
 |---|---|
 | `launch-a-play` | Estimate the ICP, create a draft play, connect LinkedIn, preview each lane, confirm, activate, explain the next 48 hours. |
+| `icp-to-play` | A sentence, a URL or a persona into the seven ICP facets, a company count, and a `people_search` lane on a new draft or an existing play. |
 | `post-discovery` | Turn "people complaining about X on LinkedIn" into a Post discovery lane, with a worked French example. |
+| `hiring-signals` | "Companies hiring for X" into a Job offers lane that reaches the buyer inside each hiring company, not the recruiter. |
 | `weekly-play-review` | Stats, run history and the approval queue folded into a one-page review with concrete changes. |
 | `instantly-to-linkedin` | With the Instantly MCP also connected: companies that opened or replied to a campaign become an account list on LinkedIn. |
 | `heyreach-migration` | From an exported HeyReach lead list: companies to an account list, facets to the ICP, and an honest note on what does not carry over. |
@@ -172,7 +174,7 @@ Full reference with arguments: [docs/tools.md](docs/tools.md).
 ```
 server.json                          registry manifest (com.gtmotto/gtmotto)
 .claude-plugin/marketplace.json      Claude Code marketplace "gtmotto"
-plugins/gtm-otto/                    the plugin: MCP server + six skills
+plugins/gtm-otto/                    the plugin: MCP server + eight skills
   .claude-plugin/plugin.json
   skills/<name>/SKILL.md
 docs/tools.md                        the 21 tools with arguments
@@ -186,6 +188,14 @@ CHANGELOG.md
 - Official MCP Registry entry: `com.gtmotto/gtmotto`
 - Agent Skills format: [agentskills.io/specification](https://agentskills.io/specification)
 - Claude Code plugins: [code.claude.com/docs/en/plugins](https://code.claude.com/docs/en/plugins)
+
+## The free skills
+
+The playbooks that need nothing but LinkedIn (find buyers in comments, ICP to a
+Sales Navigator search, hiring-signal prospecting by hand, LinkedIn limits, the
+comment and invite writer) live in [gtmotto/gtm-skills](https://github.com/gtmotto/gtm-skills).
+That repository registers no server and needs no account; each of its skills ends
+with a pointer to the skill here that runs the same recipe daily.
 
 ## Contributing
 
