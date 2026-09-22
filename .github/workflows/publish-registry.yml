@@ -1,0 +1,95 @@
+name: Publish to MCP Registry
+
+# Publishes server.json to registry.modelcontextprotocol.io whenever the
+# manifest's version changes on main.
+#
+# This file lives in the monorepo at apps/gtmotto-mcp/.github/workflows/ and is
+# mirrored into gtmotto/mcp by the monorepo's sync-gtmotto-mcp workflow. It only
+# ever RUNS in gtmotto/mcp, where server.json sits at the repository root.
+#
+# Why not the upstream-recommended `login github-oidc`: OIDC only grants
+# io.github.<org>/* namespaces. Ours is com.gtmotto/linkedin, a DNS namespace,
+# so authentication needs the Ed25519 key whose public half is the
+# `v=MCPv1; k=ed25519; p=...` TXT record on the apex of gtmotto.com.
+#
+# Required secret: MCP_PRIVATE_KEY — the private key as HEX, not PEM:
+#   openssl pkey -in ~/.gtmotto/registry-key.pem -outform DER | tail -c 32 | xxd -p -c 64
+#
+# The registry is append-only per version: republishing an existing version is
+# rejected, so this checks first and no-ops rather than failing red.
+on:
+  push:
+    branches: [main]
+    paths: ["server.json"]
+  workflow_dispatch:
+
+concurrency:
+  group: publish-registry
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Read the manifest
+        id: manifest
+        run: |
+          set -euo pipefail
+          NAME="$(jq -r .name server.json)"
+          VERSION="$(jq -r .version server.json)"
+          echo "name=$NAME" >> "$GITHUB_OUTPUT"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "Manifest: $NAME @ $VERSION"
+
+      - name: Skip if this version is already published
+        id: check
+        env:
+          NAME: ${{ steps.manifest.outputs.name }}
+          VERSION: ${{ steps.manifest.outputs.version }}
+        run: |
+          set -euo pipefail
+          ENC_NAME="$(jq -rn --arg v "$NAME" '$v|@uri')"
+          ENC_VERSION="$(jq -rn --arg v "$VERSION" '$v|@uri')"
+          CODE="$(curl -s -o /dev/null -w '%{http_code}' \
+            "https://registry.modelcontextprotocol.io/v0.1/servers/${ENC_NAME}/versions/${ENC_VERSION}")"
+          if [ "$CODE" = "200" ]; then
+            echo "already=true" >> "$GITHUB_OUTPUT"
+            echo "::notice::${NAME}@${VERSION} is already published; nothing to do. Bump the version to publish again."
+          else
+            echo "already=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Install mcp-publisher
+        if: steps.check.outputs.already == 'false'
+        run: |
+          set -euo pipefail
+          curl -L "https://github.com/modelcontextprotocol/registry/releases/latest/download/mcp-publisher_linux_amd64.tar.gz" \
+            | tar xz mcp-publisher
+          ./mcp-publisher --version
+
+      - name: Validate the manifest
+        if: steps.check.outputs.already == 'false'
+        run: ./mcp-publisher validate
+
+      - name: Authenticate via DNS
+        if: steps.check.outputs.already == 'false'
+        env:
+          MCP_PRIVATE_KEY: ${{ secrets.MCP_PRIVATE_KEY }}
+        run: ./mcp-publisher login dns --domain gtmotto.com --private-key "$MCP_PRIVATE_KEY"
+
+      - name: Publish
+        if: steps.check.outputs.already == 'false'
+        run: ./mcp-publisher publish
+
+      - name: Confirm it landed
+        if: steps.check.outputs.already == 'false'
+        env:
+          NAME: ${{ steps.manifest.outputs.name }}
+          VERSION: ${{ steps.manifest.outputs.version }}
+        run: |
+          set -euo pipefail
+          curl -s --get --data-urlencode "search=$NAME" \
+            "https://registry.modelcontextprotocol.io/v0.1/servers" | grep -q "$NAME"
+          echo "::notice::Published ${NAME} @ ${VERSION}"

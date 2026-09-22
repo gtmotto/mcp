@@ -4,6 +4,25 @@ All notable changes to this repository are recorded here. The MCP server itself
 is versioned in `server.json`; the Claude Code plugin in
 `plugins/gtm-otto/.claude-plugin/plugin.json`.
 
+## 1.2.1 (2026-09-22)
+
+Manifest-only release. Published to the official MCP Registry on 2026-09-22.
+
+- **Registry name is now `com.gtmotto/linkedin`** (was `com.gtmotto/gtmotto`).
+  The registry's `search` parameter matches the server *name* string only — a
+  word that appears in a description but not the name returns zero hits — so the
+  previous name was reachable only by people who already knew the brand.
+  `linkedin` is the category query, with 62 servers on it. The `com.gtmotto`
+  namespace and the `GTM Otto` display title are unchanged.
+- `description` rewritten within the 100-character schema cap to name the three
+  daily actions and the approval gate, instead of listing client names that
+  every server in the registry shares.
+- `websiteUrl` carries `?utm_source=mcp-registry`.
+- `_meta.io.modelcontextprotocol.registry/publisher-provided` sets the GitHub
+  subregistry display name.
+- Namespace proved by DNS: a `v=MCPv1; k=ed25519` TXT record on the apex of
+  gtmotto.com. Publishing a new version re-authenticates with that key.
+
 ## Plugin 1.1.0 (2026-09-18)
 
 Two skills moved in from `gtmotto/gtm-skills`, which is now the account-free

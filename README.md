@@ -16,10 +16,12 @@ reference and the onboarding guide. The server itself runs at
 - Docs: [gtmotto.com/docs/mcp](https://gtmotto.com/docs/mcp)
 - Connect page: [app.gtmotto.com/connect](https://app.gtmotto.com/connect)
 
-**Release status (2026-09-17):** this repository contains the prepared 1.2.0
-release. The live endpoint still requires an API key; OAuth onboarding and the
-four new connection/approval tools await deployment. The setup instructions
-below describe 1.2.0. Registry and directory submissions are pending.
+**Release status (2026-09-22):** listed on the official MCP Registry as
+[`com.gtmotto/linkedin`](https://registry.modelcontextprotocol.io/v0.1/servers/com.gtmotto%2Flinkedin/versions/1.2.1)
+(manifest 1.2.1). `https://agent.gtmotto.com/mcp` answers `initialize` with no
+credentials; OAuth is served at `/.well-known/oauth-protected-resource`
+(authorization server `clerk.gtmotto.com`); 21 tools are deployed, including
+`gtm_connect_linkedin` and the three approval tools.
 
 ## What it is, in one paragraph
 
@@ -172,7 +174,7 @@ Full reference with arguments: [docs/tools.md](docs/tools.md).
 ## Repository layout
 
 ```
-server.json                          registry manifest (com.gtmotto/gtmotto)
+server.json                          registry manifest (com.gtmotto/linkedin)
 .claude-plugin/marketplace.json      Claude Code marketplace "gtmotto"
 plugins/gtm-otto/                    the plugin: MCP server + eight skills
   .claude-plugin/plugin.json
@@ -185,7 +187,7 @@ CHANGELOG.md
 ## Links
 
 - Setup guides per client: [gtmotto.com/docs/mcp](https://gtmotto.com/docs/mcp)
-- Official MCP Registry entry: `com.gtmotto/gtmotto`
+- Official MCP Registry entry: `com.gtmotto/linkedin`
 - Agent Skills format: [agentskills.io/specification](https://agentskills.io/specification)
 - Claude Code plugins: [code.claude.com/docs/en/plugins](https://code.claude.com/docs/en/plugins)
 
